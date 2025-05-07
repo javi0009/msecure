@@ -60,20 +60,20 @@ def is_rooted():
 
 def dangerous_permissions():
     print_step("Analizando permisos peligrosos de las aplicaciones...")
-    result = subprocess.check_output(['adb', 'shell', 'pm', 'list', 'packages'])
+    result = subprocess.check_output(['adb', 'shell', 'pm', 'list', 'packages', '-3'])
     packages = [line.split(':')[1] for line in result.decode().splitlines()]
 
     dangerous = [
-        'READ_SMS',               # Leer mensajes de texto (muy sensible)
-        'RECEIVE_SMS',            # Detectar y recibir mensajes (usado por spyware)
-        'RECORD_AUDIO',           # Activar micrófono y grabar audio
-        'CAMERA',                 # Acceso directo a la cámara
-        'ACCESS_FINE_LOCATION',   # Ubicación precisa (GPS)
-        'READ_CONTACTS',          # Leer lista de contactos
-        'READ_CALL_LOG',          # Leer historial de llamadas
-        'PROCESS_OUTGOING_CALLS', # Detectar llamadas salientes
-        'READ_PHONE_STATE',       # Obtener número, red, estado de llamadas
-        'SEND_SMS'                # Enviar mensajes (riesgo de fraudes)
+        'READ_SMS: granted=true',               # Leer mensajes de texto (muy sensible)
+        'RECEIVE_SMS: granted=true',            # Detectar y recibir mensajes (usado por spyware)
+        'RECORD_AUDIO: granted=true',           # Activar micrófono y grabar audio
+        'CAMERA: granted=true',                 # Acceso directo a la cámara
+        'ACCESS_FINE_LOCATION: granted=true',   # Ubicación precisa (GPS)
+        'READ_CONTACTS: granted=true',          # Leer lista de contactos
+        'READ_CALL_LOG: granted=true',          # Leer historial de llamadas
+        'PROCESS_OUTGOING_CALLS: granted=true', # Detectar llamadas salientes
+        'READ_PHONE_STATE: granted=true',       # Obtener número, red, estado de llamadas
+        'SEND_SMS: granted=true'                # Enviar mensajes (riesgo de fraudes)
         ]
 
 
