@@ -101,6 +101,24 @@ def running_services():
     except subprocess.CalledProcessError:
         print_error("Error al obtener los servicios.")
         return "No se pudieron obtener los servicios en ejecución."
+    
+def ps_dump():
+    print_step("Obteniendo lista de procesos en ejecución...")
+    try:
+        result = subprocess.check_output(['adb', 'shell', 'ps']).decode()
+        print_ok("Procesos listados correctamente, comprobando malware...")
+        process_danger = []
+        with open('procesos_peligrosos_android.txt', 'r') as peligrosos:
+            for line in peligrosos:
+                if line in result:
+                    print_warn(f"Posible proceso malicioso: {line}")
+                    process_danger.append(line)
+
+        return process_danger
+
+    except subprocess.CalledProcessError:
+        print_error("Error al obtener los servicios.")
+        return "No se pudieron obtener los servicios en ejecución."    
 
 def save_report(data, filename="reporte_seguridad_movil.json"):
     with open(filename, "w", encoding='utf-8') as f:
@@ -158,7 +176,8 @@ def security_analysis():
         "rooted" : is_rooted(),
         "dangerous_permissions" : dangerous_permissions(),
         "running_services" : running_services(),
-        "prop" : get_prop()
+        "prop" : get_prop(),
+        "danger_ps" : ps_dump()
     }
     save_report(report)
 
