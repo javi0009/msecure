@@ -5,13 +5,14 @@ import shutil
 import os
 import hashlib
 import requests
-from tqdm import tqdm
 import sys
+from tqdm import tqdm
 from dotenv import load_dotenv
 from fpdf import FPDF
+from fpdf.enums import XPos, YPos
+from datetime import datetime
 
 load_dotenv(override=True)
-from datetime import datetime
 
 # Colores ANSI para terminal
 GREEN = "\033[92m"
@@ -57,6 +58,7 @@ def wait_device():
         time.sleep(2)
 
 def is_rooted():
+    print("\n")
     print_step("Comprobando si el dispositivo está rooteado...")
     try:
         output = subprocess.check_output(['adb', 'shell', 'which su'])
@@ -71,6 +73,7 @@ def is_rooted():
         return False
 
 def check_version_status():
+    print("\n")
     print_step("Comparando versión de Android con lista de parches conocidos...")
 
     try:
@@ -105,11 +108,9 @@ def check_version_status():
         recomendacion = "Verifica manualmente la fecha del parche."
 
     print_func = print_ok if status == "Actualizado" else print_warn
-    print_func(f"Versión Android: {android_version}, SDK: {sdk}, Parche: {security_patch} → {status}")
+    print_func(f"Parche: {security_patch} → {status}")
 
     return {
-        "android_version": android_version,
-        "sdk": sdk,
         "security_patch": security_patch,
         "latest_known_patch": latest_patch,
         "status": status,
@@ -117,6 +118,7 @@ def check_version_status():
     }
 
 def dangerous_permissions():
+    print("\n")
     print_step("Analizando permisos peligrosos de las aplicaciones...")
     result = subprocess.check_output(['adb', 'shell', 'pm', 'list', 'packages', '-3'])
     packages = [line.split(':')[1] for line in result.decode().splitlines()]
@@ -151,6 +153,7 @@ def dangerous_permissions():
     return danger
     
 def ps_dump():
+    print("\n")
     print_step("Obteniendo lista de procesos en ejecución...")
     try:
         result = subprocess.check_output(['adb', 'shell', 'ps']).decode()
@@ -196,8 +199,9 @@ def consultar_virustotal_por_nombre(nombre_paquete):
     
 def analizar():
     paquetes = obtener_paquetes_usuario()
-
+    print("\n")
     print_step("Consultando VirusTotal por nombre de paquete...")
+    print("\n")
     barra = tqdm(paquetes, desc="Analizando apps", unit="app", leave=True, dynamic_ncols=True, file=sys.stdout)
     ret = []
 
@@ -221,6 +225,7 @@ def analizar():
     return ret
 
 def device_info():
+    print("\n")
     print_step("Recopilando información del dispositivo...")
 
     props = {
@@ -231,7 +236,6 @@ def device_info():
         "platform": "ro.board.platform",
         "hardware": "ro.hardware",
         "serial": "ro.serialno",
-   	    "security_patch": "ro.build.version.security_patch"
     }
 
     info = {}
@@ -251,6 +255,7 @@ def save_report(data, filename="reporte_seguridad_movil.json"):
     print_ok(f"Reporte guardado como {filename}")
 
 def get_prop():
+    print("\n")
     print_step("Comprobando características del sistema...")
     result = subprocess.check_output(['adb', 'shell', 'getprop']).decode()
     ret = prop_compare(result)
@@ -279,14 +284,15 @@ def prop_compare(result):
 
 
 def security_analysis():
+    print("\n")
     print_step("Iniciando análisis de seguridad...")
     report = {
         "rooted" : is_rooted(),
+        "device_info": device_info(),
+        "version_status": check_version_status(),
         "dangerous_permissions" : dangerous_permissions(),
         "prop" : get_prop(),
         "danger_ps" : ps_dump(),
-        "device_info": device_info(),
-        "version_status": check_version_status(),
         "virustotal_analysis": analizar(),
     }
     save_report(report)
@@ -294,70 +300,75 @@ def security_analysis():
 def generar_pdf(data, output_file="reporte_seguridad_movil.pdf"):
     class PDF(FPDF):
         def header(self):
-            self.set_font("Arial", "B", 14)
-            self.cell(0, 10, "Informe de Seguridad - Dispositivo Android", ln=True, align="C")
+            self.set_font("Times", "B", 14)
+            self.cell(0, 10, "Informe de Seguridad - Dispositivo Android", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align="C")
             self.ln(5)
 
         def section_title(self, title):
-            self.set_font("Arial", "B", 12)
+            self.set_font("Times", "B", 12)
             self.set_fill_color(220, 220, 220)
-            self.cell(0, 10, title, ln=True, fill=True)
+            self.cell(0, 10, title, new_x=XPos.LMARGIN, new_y=YPos.NEXT, fill=True)
 
         def add_list(self, items):
-            self.set_font("Arial", "", 10)
+            self.set_font("Times", "", 10)
             for item in items:
-                self.multi_cell(0, 8, f"- {item}")
+                self.multi_cell(180, 8, f"- {item}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+
+        def permission_table(self, permissions):
+            self.set_font("Times", "B", 10)
+            self.set_fill_color(240, 240, 240)
+            self.cell(60, 8, "Aplicación", border=1, fill=True)
+            self.cell(130, 8, "Permisos peligrosos", border=1, fill=True, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+            self.set_font("Times", "", 9)
+
+            for app, perms in permissions.items():
+                perm_str = ", ".join(
+                    p.split(".")[-1].split(":")[0].replace("_", " ").title()
+                    for p in perms
+                )
+                self.cell(60, 6, app, border=1)
+                self.cell(130, 6, perm_str, border=1, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
     pdf = PDF()
     pdf.add_page()
 
-    # Información del dispositivo
     if "device_info" in data:
         pdf.section_title("Información del dispositivo")
         for key, val in data["device_info"].items():
-            pdf.set_font("Arial", "", 10)
-            pdf.cell(0, 8, f"{key.capitalize().replace('_', ' ')}: {val}", ln=True)
+            pdf.set_font("Times", "", 10)
+            pdf.cell(0, 8, f"{key.capitalize().replace('_', ' ')}: {val}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
-    # Estado del root
+    if "version_status" in data:
+        pdf.section_title("Estado de versión de seguridad")
+        for key, val in data["version_status"].items():
+            pdf.set_font("Times", "", 10)
+            pdf.cell(0, 8, f"{key.replace('_', ' ').capitalize()}: {val}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+
     if "rooted" in data:
         pdf.section_title("Root")
-        pdf.set_font("Arial", "", 10)
-        pdf.cell(0, 8, "Dispositivo con acceso root: Sí" if data["rooted"] else "Dispositivo con acceso root: No", ln=True)
+        pdf.set_font("Times", "", 10)
+        estado = "Sí" if data["rooted"] else "No"
+        pdf.cell(0, 8, f"Dispositivo con acceso root: {estado}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
-    # Permisos peligrosos
     if "dangerous_permissions" in data:
         pdf.section_title("Permisos peligrosos")
-        for app, perms in data["dangerous_permissions"].items():
-            pdf.set_font("Arial", "B", 10)
-            pdf.cell(0, 8, app, ln=True)
-            pdf.set_font("Arial", "", 9)
-            for perm in perms:
-                pdf.multi_cell(0, 6, f"    {perm}")
+        pdf.permission_table(data["dangerous_permissions"])
+        pdf.add_page()
 
-    # Propiedades de seguridad
     if "prop" in data:
         pdf.section_title("Propiedades de seguridad")
         pdf.add_list(data["prop"])
 
-    # Procesos sospechosos
     if "danger_ps" in data:
         pdf.section_title("Procesos sospechosos")
         pdf.add_list(data["danger_ps"])
 
-    # Estado de versión
-    if "version_status" in data:
-        pdf.section_title("Estado de versión de seguridad")
-        for key, val in data["version_status"].items():
-            pdf.set_font("Arial", "", 10)
-            pdf.cell(0, 8, f"{key.replace('_', ' ').capitalize()}: {val}", ln=True)
-
-    # Resultado VirusTotal
-    if "analize_application" in data:
+    if "virustotal_analysis" in data:
         pdf.section_title("Resultado análisis VirusTotal")
-        pdf.add_list(data["analize_application"])
+        pdf.add_list(data["virustotal_analysis"])
 
     pdf.output(output_file)
-    print_ok(f"PDF generado: {output_file}")
+    print(f"[+] PDF generado: {output_file}")
 
 def main():
     print_banner()
@@ -368,8 +379,6 @@ def main():
     with open("reporte_seguridad_movil.json", "r", encoding="utf-8") as f:
         data = json.load(f)
         generar_pdf(data)
-    print_ok("PDF generado")
-
 
 def print_banner():
     banner = r"""
