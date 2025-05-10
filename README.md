@@ -28,34 +28,34 @@ Instalar pip
 apt install pip
 ```
 
-1. Crear un entorno virtual con python
+2. Crear un entorno virtual con python
 
 ```jsx
 python3 -m venv venv
 ```
 
-1. Activar el entorno
+3. Activar el entorno
 
 ```jsx
 source venv/bin/activate #En Linux
 venv\Scripts\activate #En Windows
 ```
 
-1. Instalar los paquetes necesarios
+4. Instalar los paquetes necesarios
 
 ```jsx
 pip install -r requirements.txt
 ```
 
-1. Instalar ADB (Linux)
+5. Instalar ADB (Linux)
 
 ```jsx
 sudo apt update
 sudo apt install android-tools-adb
 ```
 
-1. Obtener API de VirusTotal para análisis de aplicaciones
-2. Copiar la API en el .env (hay un template)
+6. Obtener API de VirusTotal para análisis de aplicaciones
+7. Copiar la API en el .env (hay un template)
 
 ## Uso
 
