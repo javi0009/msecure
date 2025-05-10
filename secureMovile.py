@@ -8,6 +8,7 @@ import requests
 from tqdm import tqdm
 import sys
 from dotenv import load_dotenv
+from fpdf import FPDF
 
 load_dotenv(override=True)
 from datetime import datetime
@@ -290,11 +291,85 @@ def security_analysis():
     }
     save_report(report)
 
+def generar_pdf(data, output_file="reporte_seguridad_movil.pdf"):
+    class PDF(FPDF):
+        def header(self):
+            self.set_font("Arial", "B", 14)
+            self.cell(0, 10, "Informe de Seguridad - Dispositivo Android", ln=True, align="C")
+            self.ln(5)
+
+        def section_title(self, title):
+            self.set_font("Arial", "B", 12)
+            self.set_fill_color(220, 220, 220)
+            self.cell(0, 10, title, ln=True, fill=True)
+
+        def add_list(self, items):
+            self.set_font("Arial", "", 10)
+            for item in items:
+                self.multi_cell(0, 8, f"- {item}")
+
+    pdf = PDF()
+    pdf.add_page()
+
+    # Información del dispositivo
+    if "device_info" in data:
+        pdf.section_title("Información del dispositivo")
+        for key, val in data["device_info"].items():
+            pdf.set_font("Arial", "", 10)
+            pdf.cell(0, 8, f"{key.capitalize().replace('_', ' ')}: {val}", ln=True)
+
+    # Estado del root
+    if "rooted" in data:
+        pdf.section_title("Root")
+        pdf.set_font("Arial", "", 10)
+        pdf.cell(0, 8, "Dispositivo con acceso root: Sí" if data["rooted"] else "Dispositivo con acceso root: No", ln=True)
+
+    # Permisos peligrosos
+    if "dangerous_permissions" in data:
+        pdf.section_title("Permisos peligrosos")
+        for app, perms in data["dangerous_permissions"].items():
+            pdf.set_font("Arial", "B", 10)
+            pdf.cell(0, 8, app, ln=True)
+            pdf.set_font("Arial", "", 9)
+            for perm in perms:
+                pdf.multi_cell(0, 6, f"    {perm}")
+
+    # Propiedades de seguridad
+    if "prop" in data:
+        pdf.section_title("Propiedades de seguridad")
+        pdf.add_list(data["prop"])
+
+    # Procesos sospechosos
+    if "danger_ps" in data:
+        pdf.section_title("Procesos sospechosos")
+        pdf.add_list(data["danger_ps"])
+
+    # Estado de versión
+    if "version_status" in data:
+        pdf.section_title("Estado de versión de seguridad")
+        for key, val in data["version_status"].items():
+            pdf.set_font("Arial", "", 10)
+            pdf.cell(0, 8, f"{key.replace('_', ' ').capitalize()}: {val}", ln=True)
+
+    # Resultado VirusTotal
+    if "analize_application" in data:
+        pdf.section_title("Resultado análisis VirusTotal")
+        pdf.add_list(data["analize_application"])
+
+    pdf.output(output_file)
+    print_ok(f"PDF generado: {output_file}")
+
 def main():
     print_banner()
     wait_device()
     security_analysis()
     print_ok("Análisis completado correctamente.\n")
+    print_step("Generando informe PDF...")
+    with open("reporte_seguridad_movil.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+        generar_pdf(data)
+    print_ok("PDF generado")
+
 
 def print_banner():
     banner = r"""
