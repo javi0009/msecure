@@ -2,6 +2,14 @@ import subprocess
 import time
 import json
 import shutil
+import os
+import hashlib
+import requests
+from tqdm import tqdm
+import sys
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 
 # Colores ANSI para terminal
 GREEN = "\033[92m"
@@ -10,6 +18,8 @@ CYAN = "\033[96m"
 YELLOW = "\033[93m"
 RESET = "\033[0m"
 BOLD = "\033[1m"
+
+API_KEY = os.environ.get("API_KEY") 
 
 def print_step(msg):
     print(f"{CYAN}[*] {msg}{RESET}")
@@ -91,16 +101,6 @@ def dangerous_permissions():
 
     print_ok(f"Aplicaciones con permisos sensibles detectadas: {len(danger)}")
     return danger
-
-def running_services():
-    print_step("Obteniendo servicios en ejecución...")
-    try:
-        result = subprocess.check_output(['adb', 'shell', 'dumpsys', 'activity', 'services'])
-        print_ok("Servicios listados correctamente.")
-        return result.decode()
-    except subprocess.CalledProcessError:
-        print_error("Error al obtener los servicios.")
-        return "No se pudieron obtener los servicios en ejecución."
     
 def ps_dump():
     print_step("Obteniendo lista de procesos en ejecución...")
@@ -118,7 +118,59 @@ def ps_dump():
 
     except subprocess.CalledProcessError:
         print_error("Error al obtener los servicios.")
-        return "No se pudieron obtener los servicios en ejecución."    
+        return "No se pudieron obtener los servicios en ejecución."   
+
+def obtener_paquetes_usuario():
+    print_step("Listando paquetes de usuario en el dispositivo...")
+    paquetes = subprocess.check_output(["adb", "shell", "pm", "list", "packages", "-3"]).decode().strip().splitlines()
+    nombres = [linea.split(":")[1].strip() for linea in paquetes]
+    print_ok(f"{len(nombres)} paquetes de usuario encontrados.")
+    return nombres
+
+def consultar_virustotal_por_nombre(nombre_paquete):
+    url = f"https://www.virustotal.com/api/v3/search?query={nombre_paquete}"
+    headers = {"x-apikey": API_KEY}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        datos = response.json()
+        matches = datos.get("data", [])
+        if matches:
+            archivo = matches[0]
+            stats = archivo["attributes"]["last_analysis_stats"]
+            detecciones = stats["malicious"]
+            total = sum(stats.values())
+            return detecciones, total
+        else:
+            return None, None
+    else:
+        print_warn(f"Error en consulta para {nombre_paquete} ({response.status_code})")
+        return None, None
+    
+def analizar():
+    paquetes = obtener_paquetes_usuario()
+
+    print_step("Consultando VirusTotal por nombre de paquete...")
+    barra = tqdm(paquetes, desc="Analizando apps", unit="app", leave=True, dynamic_ncols=True, file=sys.stdout)
+    ret = []
+
+    for nombre in barra:
+        detecciones, total = consultar_virustotal_por_nombre(nombre)
+
+        if detecciones is None:
+            ret.append(f"{nombre}: No encontrado")
+            estado = "No encontrado"
+        elif detecciones > 0:
+            ret.append(f"{nombre}: {detecciones}/{total}")
+            estado = f"💀 {detecciones}/{total}"
+        else:
+            ret.append(f"{nombre}: Limpio")
+            estado = "✔️ Limpio"
+
+        barra.set_postfix_str(f"{nombre}: {estado}")
+        time.sleep(15)  # Evitar límites de la API gratuita
+
+    print("\n\033[92m✔️ Análisis completado.\033[0m")
+    return ret
 
 def save_report(data, filename="reporte_seguridad_movil.json"):
     with open(filename, "w", encoding='utf-8') as f:
@@ -133,40 +185,23 @@ def get_prop():
 
 def prop_compare(result):
     output = []
-    if result.find("[ro.boot.verifiedbootstate]: [green]") != -1:
-        print_ok("Integridad del arranque verificada")
-        output.append("Integridad del arranque verificada")
-    else:
-        print_error("Integridad del arranque no verificada")
-        output.append("Integridad del arranque no verificada")
-    
-    if result.find("[ro.boot.flash.locked]: [1]") != -1:
-        print_ok("Bootloader bloqueado")
-        output.append("Bootloader bloqueado")
-    else:
-        print_error("Bootloader no bloqueado, peligro")
-        output.append("Bootloader no bloqueado, peligro!")
+    try:
+        with open("prop_compare.txt", "r", encoding="utf-8") as f:
+            for linea in f:
+                if ";" not in linea:
+                    continue
+                clave, descripcion = linea.strip().split(";", 1)
+                clave = clave.strip()
+                descripcion = descripcion.strip()
 
-    if result.find("[ro.boot.vbmeta.device_state]: [locked]") != -1:
-        print_ok("Verificación de partición activa")
-        output.append("Verificación de partición activa")
-    else:
-        print_error("Verificaicón de partición NO activa")
-        output.append("Verificación de partición NO activa")
-
-    if result.find("[ro.debuggable]: [0]") != -1:
-        print_ok("No es una build de depuración")
-        output.append("No es una build de depuración")
-    else:
-        print_error("Es una build de depuración")
-        output.append("Es una build de depuración")
-
-    if result.find("[ro.secure]: [1]") != -1:
-        print_ok("Android en modo seguro")
-        output.append("Android en modo seguro")
-    else:
-        print_error("Android NO está en modo seguro")
-        output.append("Android NO está en modo seguro")
+                if clave in result:
+                    print_ok(descripcion)
+                    output.append(descripcion)
+                else:
+                    print_error(f"No cumple: {descripcion}")
+                    output.append(f"No cumple: {descripcion}")
+    except FileNotFoundError:
+        print_error("No se encontró el archivo prop_compare.txt")
     return output
 
 
@@ -175,9 +210,9 @@ def security_analysis():
     report = {
         "rooted" : is_rooted(),
         "dangerous_permissions" : dangerous_permissions(),
-        "running_services" : running_services(),
         "prop" : get_prop(),
-        "danger_ps" : ps_dump()
+        "danger_ps" : ps_dump(),
+        "apk_analysis" : analizar(),
     }
     save_report(report)
 
