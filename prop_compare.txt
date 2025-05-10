@@ -1,0 +1,15 @@
+[ro.boot.verifiedbootstate]: [green] ; Integridad del arranque
+[ro.boot.flash.locked]: [1] ; Bootloader bloqueado
+[ro.boot.vbmeta.device_state]: [locked] ; Verificación de partición
+[ro.debuggable]: [0] ; Build de depuración
+[ro.secure]: [1] ; Modo seguro
+[ro.boot.selinux]: [enforcing] ; SE Linux activado
+[ro.adb.secure]: [1] ; ADB seguro habilitado
+[ro.crypto.state]: [encrypted] ; Almacenamiento cifrado
+[ro.crypto.type]: [file] ; Tipo de cifrado (FBE/FDE)
+[ro.boot.verifiedbootstate]: [green] ; Verified Boot en estado íntegro
+[ro.build.tags]: [release-keys] ; Build oficial (no test)
+[ro.system.build.tags]: [release-keys] ; System build oficial
+[ro.vendor.build.tags]: [release-keys] ; Vendor build oficial
+[ro.boot.warranty_bit]: [0] ; Warranty Bit no activado (sin root detectado)
+[persist.sys.usb.config]: [mtp,adb] ; Configuración USB típica
