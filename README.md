@@ -57,5 +57,5 @@ sudo apt install android-tools-adb
 3. Ejecutar la herramienta
 
 ```jsx
-python3 msecure.py
+python3 secureMovile.py
 ```
