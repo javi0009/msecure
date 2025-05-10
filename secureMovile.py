@@ -285,7 +285,8 @@ def security_analysis():
         "prop" : get_prop(),
         "danger_ps" : ps_dump(),
         "device_info": device_info(),
-        "version_status": check_version_status()
+        "version_status": check_version_status(),
+        "virustotal_analysis": analizar(),
     }
     save_report(report)
 
