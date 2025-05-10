@@ -10,6 +10,10 @@ Msecure es una herramienta diseñada para realizar un análisis de seguridad de 
 - Generar reporte en formato JSON
 - Generar reporte en formato PDF
 
+![WhatsApp Image 2025-05-10 at 19.18.38.jpeg](IMAGES/34457554-7c55-415c-bcca-075f36188ccd.png)
+
+![WhatsApp Image 2025-05-10 at 19.17.25.jpeg](IMAGES/f12f3ab4-56a0-42b3-adbb-86fdde18ce0c.png)
+
 ## Instalación
 
 1. Tener pip instalado
@@ -24,31 +28,34 @@ Instalar pip
 apt install pip
 ```
 
-2. Crear un entorno virtual con python
+1. Crear un entorno virtual con python
 
 ```jsx
 python3 -m venv venv
 ```
 
-3. Activar el entorno
+1. Activar el entorno
 
 ```jsx
 source venv/bin/activate #En Linux
 venv\Scripts\activate #En Windows
 ```
 
-4. Instalar los paquetes necesarios
+1. Instalar los paquetes necesarios
 
 ```jsx
 pip install -r requirements.txt
 ```
 
-5. Instalar ADB (Linux)
+1. Instalar ADB (Linux)
 
 ```jsx
 sudo apt update
 sudo apt install android-tools-adb
 ```
+
+1. Obtener API de VirusTotal para análisis de aplicaciones
+2. Copiar la API en el .env (hay un template)
 
 ## Uso
 
@@ -57,5 +64,5 @@ sudo apt install android-tools-adb
 3. Ejecutar la herramienta
 
 ```jsx
-python3 secureMovile.py
+python3 msecure.py
 ```
