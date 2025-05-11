@@ -178,11 +178,132 @@ def ps_dump():
         return "No se pudieron obtener los servicios en ejecución."   
 
 def obtener_paquetes_usuario():
+    print("\n")
     print_step("Listando paquetes de usuario en el dispositivo...")
     paquetes = subprocess.check_output(["adb", "shell", "pm", "list", "packages", "-3"]).decode().strip().splitlines()
     nombres = [linea.split(":")[1].strip() for linea in paquetes]
     print_ok(f"{len(nombres)} paquetes de usuario encontrados.")
     return nombres
+
+def analyze_proc_net(proto="tcp"):
+    conexiones = []
+    try:
+        output = subprocess.check_output(['adb', 'shell', f'cat /proc/net/{proto}']).decode().splitlines()
+    except subprocess.CalledProcessError:
+        print_error(f"No se pudo leer /proc/net/{proto}")
+        return conexiones
+
+    if len(output) <= 1:
+        return conexiones
+
+    for line in output[1:]: 
+        fields = line.split()
+        local_hex, remote_hex, state = fields[1], fields[2], fields[3]
+
+        local_ip, local_port = hex_to_ip_port(local_hex)
+        remote_ip, remote_port = hex_to_ip_port(remote_hex)
+
+        conexiones.append({
+            "proto": proto.upper(),
+            "local": f"{local_ip}:{local_port}",
+            "remote": f"{remote_ip}:{remote_port}",
+            "state": state,
+        })
+
+    return conexiones
+
+def hex_to_ip_port(hex_str):
+    ip_hex, port_hex = hex_str.split(':')
+    ip = '.'.join(str(int(ip_hex[i:i+2], 16)) for i in range(6, -2, -2))
+    port = str(int(port_hex, 16))
+    return ip, port
+
+def cargar_puertos_sospechosos(ruta="utils/puertos_sospechosos.txt"):
+    try:
+        with open(ruta, "r") as f:
+            return set(line.strip() for line in f if line.strip().isdigit())
+    except FileNotFoundError:
+        print_warn(f"No se encontró el archivo de puertos sospechosos: {ruta}")
+        return set()
+
+PUERTOS_SOSPECHOSOS = cargar_puertos_sospechosos()
+
+def es_socket_en_escucha(state, local_ip):
+    return state == "0A" and (local_ip == "0.0.0.0" or local_ip == "::")
+
+def es_puerto_sospechoso(puerto):
+    return puerto in PUERTOS_SOSPECHOSOS or int(puerto) > 49152
+
+def es_ip_privada(ip):
+    return (
+        ip.startswith("10.") or
+        ip.startswith("192.168.") or
+        ip.startswith("127.") or
+        (ip.startswith("172.") and 16 <= int(ip.split(".")[1]) <= 31)
+    )
+
+def consultar_ip_virustotal(ip):
+    url = f"https://www.virustotal.com/api/v3/ip_addresses/{ip}"
+    headers = {"x-apikey": API_KEY}
+    try:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            datos = response.json()
+            stats = datos.get("data", {}).get("attributes", {}).get("last_analysis_stats", {})
+            detecciones = stats.get("malicious", 0)
+            total = sum(stats.values())
+            return detecciones, total
+        else:
+            print_warn(f"Error en consulta para {ip} ({response.status_code})")
+            return None, None
+    except Exception as e:
+        print_warn(f"Excepción en consulta VirusTotal: {e}")
+        return None, None
+
+def analizar_conexiones_por_heuristica():
+    print_step("Análisis heurístico de conexiones TCP/UDP...")
+
+    conexiones = analyze_proc_net("tcp") + analyze_proc_net("udp")
+    sospechosas = []
+    ips_consultadas = {}
+
+    for conn in conexiones:
+        ip_remota, puerto_remoto = conn["remote"].split(":")
+        ip_local, puerto_local = conn["local"].split(":")
+        estado = conn["state"]
+        motivo = None
+
+        if not es_ip_privada(ip_remota) and conn["proto"] == "TCP" and estado == "01":
+            motivo = "Conexión saliente a IP pública"
+        elif es_socket_en_escucha(estado, ip_local):
+            motivo = "Puerto en escucha accesible públicamente"
+        elif es_puerto_sospechoso(puerto_remoto):
+            motivo = f"Puerto remoto sospechoso: {puerto_remoto}"
+
+        if motivo:
+            resultado = {"motivo": motivo}
+
+            if ip_remota not in ips_consultadas:
+                time.sleep(15)  # Respetar límite de 4 req/min en la API gratuita
+                detecciones, total = consultar_ip_virustotal(ip_remota)
+                if detecciones is not None:
+                    resultado["virustotal"] = f"{detecciones}/{total}"
+                else:
+                    resultado["virustotal"] = "No encontrado"
+                ips_consultadas[ip_remota] = resultado["virustotal"]
+            else:
+                resultado["virustotal"] = ips_consultadas[ip_remota]
+
+            sospechosas.append({**conn, **resultado})
+
+    if not conexiones:
+        print_ok("No se encontraron conexiones TCP/UDP.")
+    elif not sospechosas:
+        print_step(f"{len(sospechosas)} conexiones sospechosas encontradas.")
+    return {
+        "total_conexiones": len(conexiones),
+        "sospechosas": sospechosas
+    }
 
 def consultar_virustotal_por_nombre(nombre_paquete):
     url = f"https://www.virustotal.com/api/v3/search?query={nombre_paquete}"
@@ -299,6 +420,7 @@ def security_analysis():
         "dangerous_permissions" : dangerous_permissions(),
         "prop" : get_prop(),
         "danger_ps" : ps_dump(),
+        "network_heuristic": analizar_conexiones_por_heuristica(),
         "virustotal_analysis": analizar(),
     }
     save_report(report)
@@ -328,11 +450,12 @@ def generar_pdf(data, output_file="output/reporte_seguridad_movil.pdf"):
             self.set_font("Times", "", 9)
 
             for app, perms in permissions.items():
+                nombre_limpio = " ".join(app.split(".")[-2:]).replace("_", " ").title()
                 perm_str = ", ".join(
                     p.split(".")[-1].split(":")[0].replace("_", " ").title()
                     for p in perms
                 )
-                self.cell(60, 6, app, border=1)
+                self.cell(60, 6, nombre_limpio, border=1)
                 self.cell(130, 6, perm_str, border=1, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
     pdf = PDF()
@@ -373,8 +496,31 @@ def generar_pdf(data, output_file="output/reporte_seguridad_movil.pdf"):
         pdf.section_title("Resultado análisis VirusTotal")
         pdf.add_list(data["virustotal_analysis"])
 
+    if "network_heuristic" in data:
+        pdf.section_title("Conexiones de Red Sospechosas")
+        total = data["network_heuristic"].get("total_conexiones", 0)
+        sospechosas = data["network_heuristic"].get("sospechosas", [])
+
+        pdf.set_font("Times", "", 10)
+        pdf.cell(0, 8, f"Total de conexiones analizadas: {total}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        pdf.cell(0, 8, f"Conexiones marcadas como sospechosas: {len(sospechosas)}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        pdf.ln(3)
+
+        if sospechosas:
+            conexiones_formateadas = []
+            for c in sospechosas:
+                virustotal_info = c.get("virustotal", "No analizado")
+                estado_tcp = tcp_state_human(c.get("state", ""))
+                conexiones_formateadas.append(
+                    f"[{c['proto']}] {c['local']} → {c['remote']} [{estado_tcp}] → {c['motivo']} [VT: {virustotal_info}]"
+                )
+            pdf.add_list(conexiones_formateadas)
+        else:
+            pdf.cell(0, 8, "No se encontraron conexiones sospechosas.", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+
+
     pdf.output(output_file)
-    print(f"[+] PDF generado: {output_file}")
+    print_step(f"PDF generado: {output_file}")
 
 def main():
     print_banner()
