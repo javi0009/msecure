@@ -218,7 +218,7 @@ def analizar():
             ret.append(f"{nombre}: No encontrado")
             estado = "No encontrado"
         elif detecciones > 0:
-            ret.append(f"{nombre}: {detecciones}/{total}")
+            ret.append(f"{nombre}: posible app maliciosa con detecciones de {detecciones}/{total} antivirus")
             estado = f"💀 posible app maliciosa con detecciones de {detecciones}/{total} antivirus"
         else:
             ret.append(f"{nombre}: Limpio")
