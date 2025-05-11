@@ -1,0 +1,258 @@
+{
+    "rooted": false,
+    "device_info": {
+        "model": "SM-S926B",
+        "manufacturer": "samsung",
+        "android_version": "14",
+        "sdk": "34",
+        "platform": "erd9945",
+        "hardware": "s5e9945",
+        "serial": "RZCX409W32V"
+    },
+    "version_status": {
+        "security_patch": "2024-11-01",
+        "latest_known_patch": "2024-05-05",
+        "status": "Actualizado",
+        "recomendacion": "Ninguna"
+    },
+    "dangerous_permissions": {
+        "co.hinge.app": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.ubercab.eats": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.sec.android.app.sbrowser": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ GRANTED_BY_DEFAULT|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.tuya.smartlife": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.zhiliaoapp.musically": [
+            "android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.READ_CONTACTS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.ubercab": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.ovelin.guitartuna": [
+            "android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.glovo": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "enterprises.dating.boo": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "org.granada.bus": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.elparking.elparking": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.imaginbank.app": [
+            "android.permission.READ_CONTACTS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.tinder": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.READ_CONTACTS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.amazon.dee.app": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.truecaller": [
+            "android.permission.READ_SMS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT|RESTRICTION_UPGRADE_EXEMPT]",
+            "android.permission.READ_CALL_LOG: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT|RESTRICTION_UPGRADE_EXEMPT]",
+            "android.permission.RECEIVE_SMS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT|RESTRICTION_UPGRADE_EXEMPT]",
+            "android.permission.READ_PHONE_STATE: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.PROCESS_OUTGOING_CALLS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT|RESTRICTION_UPGRADE_EXEMPT]",
+            "android.permission.READ_CONTACTS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.facebook.stella": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.huami.watch.hmwatchmanager": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.whatsapp": [
+            "android.permission.FOREGROUND_SERVICE_CAMERA: granted=true",
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.READ_PHONE_STATE: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.READ_CONTACTS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.samsung.android.arzone": [
+            "android.permission.CAMERA: granted=true, flags=[ GRANTED_BY_DEFAULT|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.bumble.app": [
+            "android.permission.FOREGROUND_SERVICE_CAMERA: granted=true",
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.yunshi.robotlife": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "net.lovoo.android": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.ftw_and_co.happn": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.samsung.android.galaxycontinuity": [
+            "android.permission.READ_SMS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]",
+            "android.permission.READ_CALL_LOG: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]",
+            "android.permission.READ_PHONE_STATE: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.READ_CONTACTS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.facebook.katana": [
+            "android.permission.FOREGROUND_SERVICE_CAMERA: granted=true"
+        ],
+        "org.telegram.messenger": [
+            "android.permission.FOREGROUND_SERVICE_CAMERA: granted=true",
+            "android.permission.READ_CALL_LOG: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT|RESTRICTION_UPGRADE_EXEMPT]",
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.READ_PHONE_STATE: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.samsung.android.spay": [
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.READ_PHONE_STATE: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.huawei.hwid": [
+            "android.permission.READ_SMS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT|RESTRICTION_UPGRADE_EXEMPT]"
+        ],
+        "com.hotornot.app": [
+            "android.permission.FOREGROUND_SERVICE_CAMERA: granted=true",
+            "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.azarlive.android": [
+            "android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ],
+        "com.instagram.android": [
+            "android.permission.FOREGROUND_SERVICE_CAMERA: granted=true",
+            "android.permission.CAMERA: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]",
+            "android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+        ]
+    },
+    "prop": [
+        "Integridad del arranque",
+        "Bootloader bloqueado",
+        "Verificación de partición",
+        "Build de depuración",
+        "Modo seguro",
+        "SE Linux activado",
+        "ADB seguro habilitado",
+        "Almacenamiento cifrado",
+        "Tipo de cifrado (FBE/FDE)",
+        "Verified Boot en estado íntegro",
+        "Build oficial (no test)",
+        "System build oficial",
+        "Vendor build oficial",
+        "Warranty Bit no activado (sin root detectado)",
+        "No cumple: Configuración USB típica"
+    ],
+    "danger_ps": [
+        "com.android.settings\n"
+    ],
+    "virustotal_analysis": [
+        "com.random.chat.app: Limpio",
+        "co.hinge.app: Limpio",
+        "com.ubercab.eats: No encontrado",
+        "com.kick.mobile: Limpio",
+        "com.waze: No encontrado",
+        "com.shazam.android: Limpio",
+        "com.sec.android.app.sbrowser: No encontrado",
+        "com.tuya.smartlife: No encontrado",
+        "com.samsung.android.bixby.ondevice.eses: No encontrado",
+        "com.revolut.revolut: No encontrado",
+        "com.zhiliaoapp.musically: No encontrado",
+        "org.ppsspp.ppsspp: No encontrado",
+        "com.samsung.android.calendar: No encontrado",
+        "com.radio.fmradio: No encontrado",
+        "com.samsung.android.app.reminder: No encontrado",
+        "com.ubercab: No encontrado",
+        "tv.twitch.android.app: Limpio",
+        "net.zedge.android: Limpio",
+        "com.reddit.frontpage: No encontrado",
+        "com.ovelin.guitartuna: No encontrado",
+        "com.anonimchat: No encontrado",
+        "com.google.android.apps.docs.editors.docs: Limpio",
+        "io.anonchat: No encontrado",
+        "com.samsung.android.voc: No encontrado",
+        "com.glovo: No encontrado",
+        "com.samsung.android.app.tips: Limpio",
+        "enterprises.dating.boo: Limpio",
+        "com.sec.android.app.clockpackage: No encontrado",
+        "com.linkedin.android: Limpio",
+        "com.harman.ble.jbllink: No encontrado",
+        "com.spotify.music: Limpio",
+        "com.gi.elmundo.main: No encontrado",
+        "com.google.ar.lens: No encontrado",
+        "com.samsung.android.app.find: No encontrado",
+        "com.samsung.SMT.lang_es_es_l01: No encontrado",
+        "com.samsung.android.app.notes: No encontrado",
+        "org.granada.bus: No encontrado",
+        "com.elparking.elparking: No encontrado",
+        "com.sec.android.app.voicenote: No encontrado",
+        "com.samsung.android.nmt.apps.t2t.languagepack.enes: No encontrado",
+        "com.imaginbank.app: Limpio",
+        "com.samsung.android.app.spage: No encontrado",
+        "com.samsung.android.oneconnect: No encontrado",
+        "de.syss.MifareClassicTool: No encontrado",
+        "com.tinder: No encontrado",
+        "com.amazfitwatchfaces.st: Limpio",
+        "com.amazon.dee.app: Limpio",
+        "com.truecaller: No encontrado",
+        "com.samsung.android.app.watchmanager: No encontrado",
+        "net.universia.ugr: No encontrado",
+        "com.sec.android.app.kidshome: No encontrado",
+        "com.netflix.mediaclient: No encontrado",
+        "com.azip.unrar.unzip.extractfile: No encontrado",
+        "com.binance.dev: 2/94",
+        "homeworkoutapp.homeworkout.fitness.workout.loseweight: No encontrado",
+        "com.facebook.stella: No encontrado",
+        "com.discord: No encontrado",
+        "com.samsung.ecomm.global.gbr: No encontrado",
+        "com.scaleup.photofx: No encontrado",
+        "com.huami.watch.hmwatchmanager: No encontrado",
+        "com.sec.android.app.shealth: No encontrado",
+        "com.whatsapp: No encontrado",
+        "com.sec.android.app.popupcalculator: No encontrado",
+        "net.infojobs.mobile.android: Limpio",
+        "com.samsung.android.bixby.ondevice.enus: No encontrado",
+        "com.google.android.apps.docs: Limpio",
+        "com.samsung.android.arzone: No encontrado",
+        "com.bumble.app: Limpio",
+        "com.chatous.chatous: No encontrado",
+        "com.yunshi.robotlife: No encontrado",
+        "com.zzkko: No encontrado",
+        "net.lovoo.android: Limpio",
+        "jp.pokemon.pokemontcgp: No encontrado",
+        "com.ftw_and_co.happn: No encontrado",
+        "com.samsung.android.galaxycontinuity: No encontrado",
+        "com.facebook.katana: No encontrado",
+        "com.samsung.sree: No encontrado",
+        "com.samsung.android.game.gamehome: No encontrado",
+        "org.telegram.messenger: No encontrado",
+        "com.google.android.safetycore: No encontrado",
+        "com.samsung.android.spay: No encontrado",
+        "com.huawei.hwid: No encontrado",
+        "com.samsung.android.tvplus: No encontrado",
+        "com.google.android.apps.authenticator2: No encontrado",
+        "com.amazon.avod.thirdpartyclient: No encontrado",
+        "com.hotornot.app: Limpio",
+        "com.azarlive.android: Limpio",
+        "com.etermax.preguntados.lite: No encontrado",
+        "com.instagram.android: Limpio"
+    ]
+}

@@ -14,16 +14,6 @@ from datetime import datetime
 
 load_dotenv(override=True)
 
-# Colores ANSI para terminal
-GREEN = "\033[92m"
-RED = "\033[91m"
-CYAN = "\033[96m"
-YELLOW = "\033[93m"
-RESET = "\033[0m"
-BOLD = "\033[1m"
-
-API_KEY = os.environ.get("API_KEY") 
-
 def print_step(msg):
     print(f"{CYAN}[*] {msg}{RESET}")
 
@@ -35,6 +25,22 @@ def print_warn(msg):
 
 def print_error(msg):
     print(f"{RED}[✗] {msg}{RESET}")
+
+# Colores ANSI para terminal
+GREEN = "\033[92m"
+RED = "\033[91m"
+CYAN = "\033[96m"
+YELLOW = "\033[93m"
+RESET = "\033[0m"
+BOLD = "\033[1m"
+
+if os.path.isdir("output"):
+    print_ok("Carpeta output existe")
+else:
+    os.makedirs("output")
+    print_step("Carpeta output creada")
+
+API_KEY = os.environ.get("API_KEY") 
 
 def wait_device():
     print_step("Esperando a que se conecte un dispositivo ADB...")
@@ -85,7 +91,7 @@ def check_version_status():
         return {}
 
     try:
-        with open("android_patches.txt", "r") as f:
+        with open("utils/android_patches.txt", "r") as f:
             patch_dates = [line.strip() for line in f if line.strip()]
             latest_patch = max(patch_dates)
     except FileNotFoundError:
@@ -159,7 +165,7 @@ def ps_dump():
         result = subprocess.check_output(['adb', 'shell', 'ps']).decode()
         print_ok("Procesos listados correctamente, comprobando malware...")
         process_danger = []
-        with open('procesos_peligrosos_android.txt', 'r') as peligrosos:
+        with open('utils/procesos_peligrosos_android.txt', 'r') as peligrosos:
             for line in peligrosos:
                 if line in result:
                     print_warn(f"Posible proceso malicioso: {line}")
@@ -249,7 +255,7 @@ def device_info():
     print_ok("Información del dispositivo obtenida correctamente.")
     return info
 
-def save_report(data, filename="reporte_seguridad_movil.json"):
+def save_report(data, filename="output/reporte_seguridad_movil.json"):
     with open(filename, "w", encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
     print_ok(f"Reporte guardado como {filename}")
@@ -264,7 +270,7 @@ def get_prop():
 def prop_compare(result):
     output = []
     try:
-        with open("prop_compare.txt", "r", encoding="utf-8") as f:
+        with open("utils/prop_compare.txt", "r", encoding="utf-8") as f:
             for linea in f:
                 if ";" not in linea:
                     continue
@@ -297,7 +303,7 @@ def security_analysis():
     }
     save_report(report)
 
-def generar_pdf(data, output_file="reporte_seguridad_movil.pdf"):
+def generar_pdf(data, output_file="output/reporte_seguridad_movil.pdf"):
     class PDF(FPDF):
         def header(self):
             self.set_font("Times", "B", 14)
@@ -376,7 +382,7 @@ def main():
     security_analysis()
     print_ok("Análisis completado correctamente.\n")
     print_step("Generando informe PDF...")
-    with open("reporte_seguridad_movil.json", "r", encoding="utf-8") as f:
+    with open("output/reporte_seguridad_movil.json", "r", encoding="utf-8") as f:
         data = json.load(f)
         generar_pdf(data)
 
