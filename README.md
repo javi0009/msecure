@@ -34,12 +34,15 @@ apt install pip
 python3 -m venv venv
 ```
 
-3. Activar el entorno
+3. Activar el entorno (Linux)
 
 ```jsx
-source venv/bin/activate #En Linux
-venv\Scripts\activate #En Windows
+source venv/bin/activate
 ```
+
+>[!NOTE]
+>En Windows puedes activar el entorno virtual con el siguiente comando: `venv\Scripts\activate`
+
 
 4. Instalar los paquetes necesarios
 
@@ -54,8 +57,17 @@ sudo apt update
 sudo apt install android-tools-adb
 ```
 
+>[!NOTE]
+En Windows puedes instalar ADB descargando [platform-tools](https://developer.android.com/tools/releases/platform-tools?hl=es-419).
+
+
 6. Obtener API de VirusTotal para análisis de aplicaciones
-7. Copiar la API en el .env (hay un template)
+7. Copiar la API en el archivo .env.template
+
+
+>[!IMPORTANT]
+>No olvides renombrar el archivo a `.env` después de pegar tu clave de API.
+
 
 ## Uso
 
@@ -66,3 +78,6 @@ sudo apt install android-tools-adb
 ```jsx
 python3 msecure.py
 ```
+
+>[!TIP]
+>Si no se detecta el dispositivo, ejecuta adb devices y acepta la solicitud de depuración en el móvil.
