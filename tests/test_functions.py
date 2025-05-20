@@ -31,10 +31,10 @@ def test_socket_escucha_y_puerto_sospechoso():
     state = simulada["state"]
 
     if es_socket_en_escucha(state, ip_local):
-        print_warn(f"⚠️ Puerto en escucha accesible públicamente: {ip_local}:{puerto_local}")
+        print_warn(f"Puerto en escucha accesible públicamente: {ip_local}:{puerto_local}")
 
     if es_puerto_sospechoso(puerto_local):
-        print_warn(f"⚠️ Puerto considerado sospechoso por heurística: {puerto_local}")
+        print_warn(f"Puerto considerado sospechoso por heurística: {puerto_local}")
     else:
         print_ok(f"Puerto {puerto_local} no considerado sospechoso por umbral o lista.")
 
