@@ -1,5 +1,5 @@
 import os
-from secureMovile import (
+from secureMobile import (
     consultar_ip_virustotal,
     es_socket_en_escucha,
     es_puerto_sospechoso,
