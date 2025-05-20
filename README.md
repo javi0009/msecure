@@ -10,9 +10,9 @@ Msecure es una herramienta diseñada para realizar un análisis de seguridad de 
 - Generar reporte en formato JSON
 - Generar reporte en formato PDF
 
-![WhatsApp Image 2025-05-10 at 19.18.38.jpeg](IMAGES/imagen1.png)
+![Captura de análisis 1](IMAGES/imagen1.jpeg)
 
-![WhatsApp Image 2025-05-10 at 19.17.25.jpeg](IMAGES/imagen2.png)
+![Captura de análisis 2](IMAGES/imagen2.jpeg)
 
 ## Instalación
 
